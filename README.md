@@ -12,3 +12,14 @@ This repository contains hands-on labs and builds from the 14-day course.
  
 ```bash
 python scripts/hello_ai.py
+## Day 3: CLI Assistant
+
+Create a `.env` file:
+
+OPENAI_API_KEY=your_key_here
+
+Install dependencies:
+pip install -r requirements.txt
+
+Run:
+python scripts/cli_assistant.py

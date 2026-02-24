@@ -1,43 +1,80 @@
+import sys
 import os
-import time
-from dotenv import load_dotenv
-from google import genai
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-def call_llm(client, user_text: str) -> str:
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=user_text
-    )
-    return response.text.strip()
+import subprocess
+from prompts.prompt_library import get_prompt
+
+OLLAMA_PATH = r"C:\Users\ADMIN\AppData\Local\Programs\Ollama\ollama.exe"
+MODEL = "llama3"
+
+
+def call_llm(prompt: str) -> str:
+    try:
+        result = subprocess.run(
+            [OLLAMA_PATH, "run", MODEL],
+            input=prompt,
+            text=True,
+            capture_output=True,
+            encoding="utf-8",     # ✅ FIX Unicode
+            errors="ignore",      # ✅ tránh crash ký tự lạ
+            timeout=60            # ✅ tránh treo
+        )
+
+        if result.returncode != 0:
+            return f"❌ Error:\n{result.stderr.strip()}"
+
+        output = result.stdout.strip()
+
+        if not output:
+            return "⚠️ Model returned empty response."
+
+        return output
+
+    except subprocess.TimeoutExpired:
+        return "⏱️ Timeout: Model took too long to respond."
+    except FileNotFoundError:
+        return "❌ Ollama not found. Check OLLAMA_PATH."
+    except Exception as e:
+        return f"❌ Unexpected error: {str(e)}"
+
 
 def main():
-    load_dotenv()
-
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise SystemExit("Missing GOOGLE_API_KEY. Put it in a .env file.")
-
-    client = genai.Client(api_key=api_key)
-
-    print("CLI Gemini Assistant (type 'exit' to quit)")
+    print("=== CLI AI Assistant (Prompt Library + Ollama) ===")
+    print("Modes: qa / summarize / classify / rewrite / plan")
+    print("Type 'exit' to quit\n")
 
     while True:
-        user_text = input("\nYou: ").strip()
+        mode = input("Mode: ").strip().lower()
 
-        if user_text.lower() in {"exit", "quit"}:
+        if mode in {"exit", "quit"}:
             print("Goodbye.")
             break
 
-        if not user_text:
-            print("Please enter a question.")
+        if mode not in {"qa", "summarize", "classify", "rewrite", "plan"}:
+            print("❌ Invalid mode\n")
             continue
 
-        try:
-            answer = call_llm(client, user_text)
-            print("\nAssistant:", answer)
-            time.sleep(3)
-        except Exception as e:
-            print("\nError:", str(e))
+        user_input = input("You: ").strip()
+
+        if not user_input:
+            print("⚠️ Empty input\n")
+            continue
+
+        prompt = get_prompt(mode, user_input)
+
+        if not prompt:
+            print("❌ Prompt generation failed\n")
+            continue
+
+        print("\n⏳ Thinking...\n")
+
+        response = call_llm(prompt)
+
+        print("Assistant:\n")
+        print(response)
+        print("\n" + "="*50 + "\n")
+
 
 if __name__ == "__main__":
     main()

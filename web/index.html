@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Day 7 AI Web App</title>
+    <title>Day 8 AI Web App</title>
     <style>
         body {
             font-family: system-ui, Arial;
@@ -48,7 +48,7 @@
 </head>
 
 <body>
-    <h1>AI Web App (Local)</h1>
+    <h1>Day 8 AI Web App (Local)</h1>
     <p>Enter text below and send it to your AI backend.</p>
 
     <textarea id="prompt" placeholder="Type your question or instruction..."></textarea>
@@ -63,6 +63,16 @@
     <pre id="output"></pre>
 
     <script>
+        function getSessionId() {
+            const key = "day8_session_id";
+            let id = localStorage.getItem(key);
+            if (!id) {
+                id = "sess_" + crypto.randomUUID();
+                localStorage.setItem(key, id);
+            }
+            return id;
+        }
+
         const promptEl = document.getElementById("prompt");
         const statusEl = document.getElementById("status");
         const outputEl = document.getElementById("output");
@@ -80,10 +90,12 @@
             statusEl.textContent = "Calling backend...";
 
             try {
-                const res = await fetch("/api/ask", {
+                const session_id = getSessionId();
+
+                const res = await fetch("/api/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt })
+                    body: JSON.stringify({ session_id, prompt })
                 });
 
                 const data = await res.json();

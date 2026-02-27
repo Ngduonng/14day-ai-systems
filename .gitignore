@@ -14,3 +14,4 @@ Thumbs.db
 
 # RAG Data
 data/index.json
+data/sessions.json

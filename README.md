@@ -36,3 +36,13 @@ python scripts/rag_assistant.py --build-index
 ```bash
 python scripts/rag_assistant.py
 ```
+
+## Day 7: AI Web App (Local)
+
+Run backend:
+```bash
+uvicorn src.app:app --reload --port 8000
+```
+
+Open:
+http://127.0.0.1:8000/

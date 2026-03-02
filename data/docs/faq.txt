@@ -1,0 +1,16 @@
+Frequently Asked Questions (FAQ)
+
+Q: What are the main steps in the onboarding process?
+A: Our onboarding process consists of three main steps:
+1. Account Creation: Sign up on our portal using your company email.
+2. Profile Setup: Complete your user profile, including emergency contact and dietary preferences.
+3. Orientation Session: Attend the mandatory 1-hour virtual orientation on your first Monday.
+
+Q: How do I access the internal company portal?
+A: You can access the internal portal at portal.company.internal. Use your Single Sign-On (SSO) credentials. If you are a new hire, your manager will provide access on your first day.
+
+Q: Who do I contact for IT support?
+A: IT Support can be reached by emailing helpdesk@company.com or by calling extension 4357 (HELP). Operating hours are 8 AM to 6 PM EST. For critical after-hours issues, please page the on-call engineer.
+
+Q: Can I request new hardware?
+A: Yes, hardware upgrade requests can be submitted through the internal portal under 'IT Requests'. Approvals from your direct manager are required for items exceeding $500.

@@ -1,0 +1,3 @@
+Refunds allowed within 14 days.
+Support email: support@example.com
+Onboarding steps: create account, verify email, complete profile.
